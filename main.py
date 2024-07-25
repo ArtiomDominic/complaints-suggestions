@@ -20,8 +20,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
-WAITING_FOR_COMPLAINT, CONFIRMATION = range(2)
-WAITING_FOR_SUGGESTION, CONFIRMATION = range(2)
+WAITING_FOR_CS, CONFIRMATION = range(2)
 
 FILE_NAME: str = ''
 
@@ -53,13 +52,13 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
 async def complaint_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     assert update.message is not None
     await update.message.reply_text('Please send your complaint.')
-    return WAITING_FOR_COMPLAINT
+    return WAITING_FOR_CS
 
 @first_id_check
 async def suggestion_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     assert update.message is not None
     await update.message.reply_text('Please send your suggestion.')
-    return WAITING_FOR_SUGGESTION
+    return WAITING_FOR_CS
 
 @first_id_check
 async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -139,7 +138,8 @@ async def send_cs(context: CallbackContext) -> None:
     msg = MIMEText(file_content)
     msg['Subject'] = f"Complaints and Suggestions for week {context.job.data}"
     msg['From'] = config['MY_EMAIL']
-    #! msg['To'] = config['ADMIN_EMAIL']
+    #! msg['To'] = config['ADMIN_EMAIL1']
+    #! msg['Cc'] = config['ADMIN_EMAIL2']
     msg['To'] = config['MY_EMAIL']
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
@@ -154,7 +154,7 @@ async def set_file_name(application) -> None:
     current_date = date.today()
     monday = (current_date - timedelta(days = current_date.weekday()))
     date_shift = (monday + timedelta(days=6))
-    FILE_NAME = f"C&S_{monday.strftime("%d-%m-%Y")}_{date_shift.strftime("%d-%m-%Y")}.txt"
+    FILE_NAME = f"C&S_{monday.strftime('%d-%m-%Y')}_{date_shift.strftime('%d-%m-%Y')}.txt"
     logger.info(f"CURRENT FILE NAME: {FILE_NAME}")
 
 
@@ -169,8 +169,7 @@ def main() -> None:
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('complaint', complaint_command), CommandHandler('suggestion', suggestion_command), CommandHandler('start', start_command), CommandHandler('help', help_command), CommandHandler('clear', clear_command)],
         states={
-            WAITING_FOR_COMPLAINT: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_complaint)],
-            WAITING_FOR_SUGGESTION: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_suggestion)],
+            WAITING_FOR_CS: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_complaint),MessageHandler(filters.TEXT & ~filters.COMMAND, handle_suggestion)],
             CONFIRMATION: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_confirmation)]
         },
         fallbacks=[CommandHandler('cancel', cancel_command)],
