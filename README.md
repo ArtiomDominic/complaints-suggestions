@@ -1,10 +1,6 @@
-# complaints-suggestions
+# Complaints-Suggestions python bot
 
 This is a python telegram bot example for a simple complaint and suggestions that uses the [python-telegram-bot](https://python-telegram-bot.org) library.
-
-# Documentation for Telegram Bot
-
-
 
 ## Overview
 
