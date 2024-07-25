@@ -132,7 +132,7 @@ async def send_cs(context: CallbackContext) -> None:
         with open(f"data/{context.job.data}", 'r') as file:
             file_content = file.read()
     except IsADirectoryError:
-        logger.error(f"File does not exits. Ignore if it is the first time seeing this error")
+        logger.warning(f"File does not exits. Ignore if file was not created since no complaints or suggestions were made.")
 
     # Send email
     msg = MIMEText(file_content)
