@@ -4,7 +4,7 @@ This is a python telegram bot example for a simple complaint and suggestions tha
 
 ## Overview
 
-This Python script defines a Telegram bot designed to collect complaints and suggestions from users. It utilizes the `python-telegram-bot` library to interact with the Telegram API, `dotenv` for environment variable management, and `smtplib` along with `email.mime.text.MIMEText` for sending emails.
+This Python script defines a Telegram bot designed to collect complaints and suggestions from users. It utilizes the `python-telegram-bot` library to interact with the Telegram API, `dotenv` for environment variable management, and `smtplib` for sending emails.
 
 ## Environment Variables
 
