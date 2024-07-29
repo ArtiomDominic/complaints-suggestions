@@ -12,19 +12,21 @@ wget https://github.com/ArtiomDominic/complaints-suggestions/archive/refs/heads/
 # Install pip
 apt install python3-pip
 
-# Install the project requirements
+# Create a virtual python environment
 cd coplaints-suggestions-main
 python -m venv venv
 source venv/bin/activate
+
+# Install the project requirements
 pip install -r requirements.txt
 
 # # Copy .env file to the root of the project
 # tar -xvf main.tar.gz
 
 # # Run the project in the background
-# python main.py
+python main.py
 # Ctrl + Z
-# bg
-# disown
+bg
+disown
 # # Check pid
-# ps -aef
+ps -aef
