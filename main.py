@@ -197,4 +197,5 @@ if __name__ == '__main__':
         file.write(PID)
         file.close()
 
+    # Run main function
     main()
