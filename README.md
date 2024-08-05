@@ -13,7 +13,7 @@ The bot requires the following environment variables to be set in a `.env` file:
 - `MY_EMAIL`: The email address from which the bot sends summaries of complaints and suggestions.
 - `ADMIN_EMAIL`: The email address to which the bot sends summaries of complaints and suggestions.
 - `SERVER_APP_PASSWORD`: The app-specific password for the email server.
-- `TOKEK`: Telegram bot token.
+- `TOKEN`: Telegram bot token.
 
 ## Dependencies
 
