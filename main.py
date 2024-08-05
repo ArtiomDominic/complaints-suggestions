@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 WAITING_FOR_CS, CONFIRMATION = range(2)
 
 FILE_NAME: str = ''
+OLD_FILE_NAME: str = ''
 
 # Decorators
 def first_id_check(func):
@@ -133,6 +134,7 @@ async def send_cs(context: CallbackContext) -> None:
             file_content = file.read()
     except IsADirectoryError:
         logger.warning(f"File does not exits. Ignore if file was not created since no complaints or suggestions were made.")
+    logger.info(f"SENDING FILE CONTENT: {file_content}")
 
     # Send email
     msg = MIMEText(file_content)
@@ -150,7 +152,9 @@ async def send_cs(context: CallbackContext) -> None:
 # Change file name to current week each monday at 00:00
 async def set_file_name(application) -> None:
     global FILE_NAME
+    global OLD_FILE_NAME
 
+    OLD_FILE_NAME = FILE_NAME
     current_date = date.today()
     monday = (current_date - timedelta(days = current_date.weekday()))
     date_shift = (monday + timedelta(days=6))
@@ -161,6 +165,7 @@ async def set_file_name(application) -> None:
 # Main
 def main() -> None:
     global FILE_NAME
+    global OLD_FILE_NAME
 
     app = Application.builder().token(config['TOKEN']).build()
     assert app.job_queue is not None
@@ -177,7 +182,7 @@ def main() -> None:
 
     # Schedule the job every week
     app.job_queue.run_daily(days=(1,), time=time(0, 0, 0, tzinfo=timezone(timedelta(seconds=10800))), callback=set_file_name, name='set_file_name')
-    app.job_queue.run_daily(days=(1,), time=time(10, 0, 0, tzinfo=timezone(timedelta(seconds=10800))), callback=send_cs, name='send_cs', data=FILE_NAME)
+    app.job_queue.run_daily(days=(1,), time=time(10, 0, 0, tzinfo=timezone(timedelta(seconds=10800))), callback=send_cs, name='send_cs', data=OLD_FILE_NAME)
 
     # Add the ConversationHandler to the dispatcher
     app.add_handler(conv_handler)
