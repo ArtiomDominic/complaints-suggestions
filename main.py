@@ -5,7 +5,6 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from dotenv import dotenv_values
 from datetime import date, timedelta, time, timezone
 import aiofiles
-from os import path, getppid
 
 import smtplib
 from email.mime.text import MIMEText
@@ -196,11 +195,5 @@ def main() -> None:
 
 # Run the main function if the script is executed directly
 if __name__ == '__main__':
-    # Store PID in a file for monitoring if running in background or in a container/shell
-    PID = str(getppid())
-    with open('app.pid', 'w') as file:
-        file.write(PID)
-        file.close()
-
     # Run main function
     main()
