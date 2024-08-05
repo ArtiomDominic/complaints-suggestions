@@ -5,6 +5,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from dotenv import dotenv_values
 from datetime import date, timedelta, time, timezone
 import aiofiles
+from os import path
 
 import smtplib
 from email.mime.text import MIMEText
